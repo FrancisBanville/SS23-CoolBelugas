@@ -81,6 +81,22 @@ count_links <- function(game) {
 }
 
 
+# compute modularity 
+measure_modularity <- function(game) {
+  
+  mod <- rep(0, length(game$duration))
+  
+  for (a in 1:length(game$duration)) {
+    # make graph (and remove nodes without interactions)
+    N <- graph_from_adjacency_matrix(game$Ns[,,a])
+    N <- delete.vertices(simplify(N), degree(N)==0)
+    # get clusters that maximize modularity and compute modularity
+    communities <- cluster_walktrap(N)
+    mod[a] <- modularity(N, membership = communities$membership)
+  }
+  return(mod)
+}
+
 df <- data.frame()
 
 for (i in 1:5) {
@@ -89,11 +105,19 @@ for (i in 1:5) {
   game <- make_networks(i)
   duration <- game$duration
   
+  # make graphs
+  
   # compute number of links through time
   links <- count_links(game)
   
+  # compute modularity through time
+  mod <- measure_modularity(game)
+  
   # add rows to dataframe
-  df <- rbind(df, data.frame(duration = duration, links = links, game = rep(i, length(duration))))
+  df <- rbind(df, data.frame(duration = duration, 
+                             links = links, 
+                             mod = mod,
+                             game = rep(i, length(duration))))
 }
 
 df <- df %>% 
@@ -102,11 +126,26 @@ df
 
 ##### visualize data ##### 
 
-ggplot(df) +
-  geom_line(aes(x = duration, y = links, col = game), lw = 1) +
-  geom_point(aes(x = duration, y = links, col = game)) + 
+# number of interactions through time
+ggplot(df, aes(x = duration, y = links, col = game)) +
+  geom_line(lw = 1) +
+  geom_point() + 
   xlab("duration (s)") +
   ylab("number of interactions")
+
+# modularity through time (start after 1 min)
+ggplot(df %>% filter(duration > 60), aes(x = duration, y = mod, col = game)) +
+  geom_point() + 
+  geom_smooth() +
+  xlab("duration (s)") +
+  ylab("modularity")
+
+# modularity vs number of interactions (start after 1 min)
+ggplot(df %>% filter(duration > 60), aes(x = links, y = mod, col = game)) +
+  geom_point() + 
+  geom_smooth() +
+  xlab("number of interactions") +
+  ylab("modularity")
 
 
 
