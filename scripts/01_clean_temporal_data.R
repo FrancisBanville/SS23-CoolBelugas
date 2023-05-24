@@ -66,7 +66,6 @@ make_networks <- function(gameid) {
 }
 
 
-
 ##### compute measures #####
 
 # compute number of interactions (herbivory and predatory)
@@ -122,7 +121,6 @@ for (i in 1:5) {
 
 df <- df %>% 
   mutate(duration = as.numeric(duration), game = as.factor(game))
-df
 
 ##### visualize data ##### 
 
@@ -150,5 +148,9 @@ ggplot(df %>% filter(duration > 60), aes(x = links, y = mod, col = game)) +
 
 
 
+## igraph
+
+net_148 <- graph_from_adjacency_matrix(game$Ns[,,148])
+plot(net_148)
 
 
