@@ -10,4 +10,4 @@ data_network %>%
   rename("test" = "...1")
 
 
-data_network[,1]
+# data_network[,1]
