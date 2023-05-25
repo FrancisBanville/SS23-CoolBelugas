@@ -20,8 +20,6 @@ trophic_data <- trophic_data %>% select(-"...1")
 head(trophic_data)
 
 
-# gameid = 1 
-
 # filter games and get temporal networks
 make_networks <- function(gameid) {
   
@@ -96,6 +94,10 @@ make_networks <- function(gameid) {
   }
   return(list(Ns = Ns, duration = game$duration, id = id, roles = roles))
 }
+
+
+t <- make_networks(1)
+class(t)
 
 
 ##### compute measures #####
