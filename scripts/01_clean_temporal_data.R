@@ -1,5 +1,7 @@
 library(dplyr)
 library(ggplot2)
+library(gifski)
+library(gganimate)
 library(readr)
 library(stringr)
 library(tidyr)
@@ -191,6 +193,22 @@ ggsave("figures/links_time.png")
     theme_classic())
 
 ggsave("figures/links_time_comp.png")
+
+
+## animate plot
+g1_anim <- ggplot(df, aes(x = duration, y = links, col = game)) +
+  geom_point(size = 4) + 
+  geom_line(size = 1, alpha = 0.8) +
+  labs(col = "game") +
+  xlab("duration (s)") +
+  ylab("number of interactions") +
+  theme_classic() +
+  transition_reveal(duration) +
+  ease_aes('linear')
+
+animate(g1_anim, duration = 10, fps = 20, width = 600, height = 600, renderer = gifski_renderer())
+anim_save("figures/links_time_animate.gif")
+
 
 # modularity through time (start after 1 min)
 (g2 <- ggplot(df %>% filter(duration > 60), aes(x = duration, y = mod, col = game)) +
