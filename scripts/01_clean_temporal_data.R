@@ -165,6 +165,12 @@ for (i in 1:max(trophic_data$game_id)) {
 df <- df %>% 
   mutate(duration = as.numeric(duration), game = as.factor(game))
 
+df_nocomp <- df %>% 
+  filter(game %in% c(1:6))
+
+df_comp <- df %>% 
+  filter(game %in% c(7:9))
+
 ##### visualize data ##### 
 
 # number of interactions through time
@@ -176,6 +182,16 @@ df <- df %>%
 
 ggsave("figures/links_time.png")
 
+(g1comp <- ggplot() +
+    geom_line(data = df_nocomp, aes(x = duration, y = links, linetype = game), col = "grey", alpha = 0.8, size = 0.3) +
+    geom_line(data = df_comp, aes(x = duration, y = links, col = game), size = 1.5) +
+    labs(linetype = "low competition", colour="high competition") +
+    xlab("duration (s)") +
+    ylab("number of interactions") +
+    theme_classic())
+
+ggsave("figures/links_time_comp.png")
+
 # modularity through time (start after 1 min)
 (g2 <- ggplot(df %>% filter(duration > 60), aes(x = duration, y = mod, col = game)) +
   geom_line(size = 1.5) +
@@ -184,6 +200,17 @@ ggsave("figures/links_time.png")
   theme_classic())
 
 ggsave("figures/mod_time.png")
+
+(g2comp <- ggplot() +
+    geom_line(data = df_nocomp %>% filter(duration > 60), aes(x = duration, y = mod, linetype = game), col = "grey", alpha = 0.8, size = 0.3) +
+    geom_line(data = df_comp %>% filter(duration > 60), aes(x = duration, y = mod, col = game), size = 1.5) +
+    labs(linetype = "low competition", colour="high competition") +
+    xlab("duration (s)") +
+    ylab("modularity") +
+    theme_classic())
+
+ggsave("figures/mod_time_comp.png")
+
 
 # modularity vs number of interactions (start after 1 min)
 (g3 <- ggplot(df %>% filter(duration > 60), aes(x = links, y = mod, col = game)) +
@@ -194,6 +221,19 @@ ggsave("figures/mod_time.png")
   theme_classic())
 
 ggsave("figures/mod_links.png")
+
+(g3comp <- ggplot() +
+    geom_point(data = df_nocomp %>% filter(duration > 60), aes(x = links, y = mod, shape = game), col = "grey", alpha = 0.1, size = 0.4) +
+    geom_smooth(data = df_nocomp %>% filter(duration > 60), aes(x = links, y = mod, linetype = game), col = "grey", alpha = 0.1, size = 0.4) +
+    geom_point(data = df_comp %>% filter(duration > 60), aes(x = links, y = mod, col = game), alpha = 0.3) +
+    geom_smooth(data = df_comp %>% filter(duration > 60), aes(x = links, y = mod, col = game), size = 1.5) +
+    guides(shape = "none") +
+    labs(linetype = "low competition", colour="high competition") +
+    xlab("number of interactions") +
+    ylab("modularity") +
+    theme_classic())
+
+ggsave("figures/mod_links_comp.png")
 
 
 
@@ -221,7 +261,7 @@ visualize_network <- function(gameid) {
 }
 
 for (i in 1:max(trophic_data$game_id)) {
-  (gn1 <- visualize_network(1))
+  (gn1 <- visualize_network(i))
   ggsave(filename = paste("figures/networks/network_game",i, ".png", sep = ""), scale = 1.1)
 }
 
@@ -289,6 +329,11 @@ for (i in 1:max(trophic_data$game_id)) {
 df_t <- df_t %>% 
   mutate(duration = as.numeric(duration), game = as.factor(game))
 
+df_t_nocomp <- df_t %>% 
+  filter(game %in% c(1:6))
+
+df_t_comp <- df_t %>% 
+  filter(game %in% c(7:9))
 
 (g4 <- ggplot(df_t, aes(x = duration, y = links, col = game)) +
   geom_line(size = 1.5) +
@@ -296,7 +341,21 @@ df_t <- df_t %>%
   xlab("time (s)") +
   ylab("number of interactions") +
   theme_classic())
-ggsave("figures/links_time_instant.png", scale = 1.1)
+
+ggsave("figures/links_time_instant.png")
+
+
+(g4comp <- ggplot() +
+    geom_line(data = df_t_nocomp, aes(x = duration, y = links, linetype = game), col = "grey", alpha = 0.8, size = 0.3) +
+    geom_line(data = df_t_comp, aes(x = duration, y = links, col = game), size = 1.5) +
+    xlim(0, 2000) +
+    xlab("time (s)") +
+    ylab("number of interactions") +
+    labs(linetype = "low competition", colour="high competition") +
+    theme_classic())
+
+ggsave("figures/links_time_instant_comp.png")
+
 
 
 (g5 <- ggplot(df_t, aes(x = duration, y = mod, col = game)) +
@@ -306,4 +365,18 @@ ggsave("figures/links_time_instant.png", scale = 1.1)
   xlab("time (s)") +
   ylab("modularity") +
   theme_classic())
-ggsave("figures/mod_time_instant.png", scale = 1.1)
+
+ggsave("figures/mod_time_instant.png")
+
+(g5comp <- ggplot() +
+    geom_line(data = df_t_nocomp, aes(x = duration, y = mod, linetype = game), col = "grey", alpha = 0.8, size = 0.3) +
+    geom_line(data = df_t_comp, aes(x = duration, y = mod, col = game), size = 1.5) +
+    xlim(0, 2000) +
+    ylim(0.6, 1) +
+    xlab("time (s)") +
+    ylab("modularity") +
+    labs(linetype = "low competition", colour="high competition") +
+    theme_classic())
+
+ggsave("figures/mod_time_instant_comp.png")
+
