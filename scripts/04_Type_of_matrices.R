@@ -35,9 +35,26 @@ for (a in 1:nrow(df)) {
   }
 
 
-adding_interaction(game)
+q <- adding_interaction(game)
 
-# gameid = 1 
+parms <- 
+
+
+game <- trophic_data %>% 
+  filter(!is.na(ressource_id), game_id == 1)  %>% 
+  mutate(duration = time - min(time)) %>%
+  arrange(duration) %>% 
+  mutate(ti = grepl("[0-9]", ressource_id), # Using regex, sort the type of interactions
+         type_interaction = case_when(ti == "TRUE" ~ "foraging", # If resource_id = digit --> foraging activity
+                                      ti == "FALSE" ~ "predation")) %>% 
+  select(-ti) %>% 
+  mutate(score = case_when(ressource_type == "Type A" ~ 5,
+                           ressource_type == "Type B" ~ 1))
+
+
+Ns <- adding_interaction(game)
+
+# gameid = 1
 
 # filter games and get temporal networks
 make_networks <- function(gameid) {
@@ -100,7 +117,7 @@ make_networks <- function(gameid) {
 
   }
   
-  # adding_interaction(game)
+  # Ns <- adding_interaction(game)
   
   # find individual roles
   metadata_game <- metadata %>% filter(game_id == gameid)
