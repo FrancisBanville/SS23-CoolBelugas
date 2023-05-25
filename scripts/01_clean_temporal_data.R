@@ -20,6 +20,8 @@ trophic_data <- trophic_data %>% select(-"...1")
 head(trophic_data)
 
 
+# gameid = 1 
+
 # filter games and get temporal networks
 make_networks <- function(gameid, type = "binary") {
   
@@ -27,7 +29,20 @@ make_networks <- function(gameid, type = "binary") {
   game <- trophic_data %>% 
     filter(!is.na(ressource_id), game_id == gameid)  %>% 
     mutate(duration = time - min(time)) %>%
-    arrange(duration)
+    arrange(duration) %>% 
+    mutate(ti = grepl("[0-9]", ressource_id), # Using regex, sort the type of interactions
+           type_interaction = case_when(ti == "TRUE" ~ "foraging", # If resource_id = digit --> foraging activity
+                                        ti == "FALSE" ~ "predation")) %>% 
+    select(-ti) %>% 
+    mutate(score = case_when(ressource_type == "Type A" ~ 5,
+                             ressource_type == "Type B" ~ 1))
+  
+  game_foraging <- game %>% 
+    filter(type_interaction == "foraging")
+  
+  game_predation <- game %>% 
+    filter(type_interaction == "predation")
+  
   
   # get consumer names
   players_game <- game %>% 
@@ -80,7 +95,7 @@ make_networks <- function(gameid, type = "binary") {
       
       Ns[,,a] <- n1
     }
-  }
+}
   # find individual roles
   metadata_game <- metadata %>% filter(game_id == gameid)
   roles <- id
@@ -102,7 +117,7 @@ make_networks <- function(gameid, type = "binary") {
 count_links <- function(game) {
   
   links <- rep(0, length(game$duration))
-
+  
   for (a in 1:length(game$duration)) {
     links[a] <- sum(game$Ns[,,a])
   }
@@ -183,6 +198,7 @@ ggsave("figures/mod_time.png")
   theme_classic())
 
 ggsave("figures/mod_links.png")
+
 
 
 # visualize networks
@@ -311,5 +327,3 @@ ggsave("figures/links_time_instant.png", scale = 1.1)
   ylab("modularity") +
   theme_classic())
 ggsave("figures/mod_time_instant.png", scale = 1.1)
-
-

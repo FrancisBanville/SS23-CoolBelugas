@@ -1,0 +1,249 @@
+game_id,player_id,role,prey_type,score,fate,killed_by,reproduced_with,prey_detected,pred_detected,comment,diet
+1,Vigilant Puma,prey,blue,0.0,killed,Resourceful Platypus,,,,,
+4,Gentle Bear,prey,blue,30.0,survived,,,,,,specialist
+4,Fierce Porcupine,prey,red,50.0,survived,,,,,,generalist
+4,Majestic Kangaroo,prey,red,50.0,survived,,,,,,generalist
+4,Brave Cheetah,prey,blue,35.0,killed,Wandering Antelope,,,,,specialist
+4,Energetic Badger,apex,,1.0,survived,,,17.0,,,
+4,Graceful Raccoon,prey,red,63.0,survived,,Wise Leopard,,,,generalist
+4,Wise Leopard,prey,red,69.0,survived,,Graceful Raccoon,,,,generalist
+4,Vigilant Puma,prey,blue,40.0,survived,,,,,,specialist
+5,Vigilant Puma,apex,,4.0,survived,,,13.0,,Number of detected prey not noted but wrote from memory,
+5,Cunning Giraffe,prey,red,0.0,killed,Swift Elephant,,,,,
+5,Daring Koala,prey,blue,60.0,survived,,,,,,specialist
+5,Resourceful Platypus,meso,,2.0,survived,,,4.0,,,
+4,Wild Tiger,meso,,0.0,killed,Wandering Antelope,,1.0,,,
+5,Bold Owl,prey,blue,5.0,killed,Swift Elephant,,,,,specialist
+5,Fierce Porcupine,prey,red,21.0,killed,Noble Zebra,,,,,generalist
+5,Gentle Bear,prey,blue,15.0,killed,Swift Elephant,,,,,specialist
+5,Swift Elephant,apex,,7.0,survived,,,14.0,,,
+2,Resilient Otter,prey,blue,40.0,killed,Playful Dolphin,,,,,specialist
+2,Peaceful Walrus,prey,blue,70.0,survived,,,,,,
+2,Playful Dolphin,apex,,2.0,survived,,,10.0,,,
+2,Daring Koala,meso,,4.0,survived,,,8.0,,,
+2,Loyal Crocodile,prey,,2.0,survived,,,27.0,,,specialist
+2,Silent Squirrel,prey,red,68.0,survived,,,,,,generalist
+2,Tenacious Mongoose,prey,red,90.0,survived,,Resourceful Platypus,,,,generalist
+2,Swift Elephant,prey,blue,50.0,survived,,,,,,specialist
+2,Agile Hippopotamus,prey,red,7.0,killed,Wise Leopard,,,,,generalist
+2,Graceful Raccoon,prey,blue,15.0,killed,Daring Koala,,,,,specialist
+2,Persistent Armadillo,prey,blue,0.0,killed,Clever Lion,,,,,
+2,Elusive Fox,prey,blue,45.0,survived,,,,,,specialist
+2,Vigilant Puma,prey,blue,70.0,survived,,,,,,specialist
+2,Enduring Beaver,prey,red,53.0,survived,,Brave Cheetah,,,,generalist
+2,Noble Zebra,prey,blue,60.0,survived,,,,,,specialist
+2,Curious Penguin,prey,blue,15.0,killed,Loyal Crocodile,,,,,specialist
+2,Wise Leopard,apex,,1.0,survived,,,9.0,,,
+3,Bold Owl,prey,blue,10.0,killed,Independent Weasel,,,,,specialist
+3,Cunning Giraffe,prey,red,15.0,killed,Resilient Otter,,,,,generalist
+3,Wise Leopard,prey,red,28.0,killed,Resilient Otter,,,,,generalist
+3,Gentle Bear,prey,red,13.0,killed,Independent Weasel,,,,,generalist
+3,Fierce Porcupine,prey,red,17.0,killed,Wandering Antelope,,,,,specialist
+3,Brave Cheetah,prey,blue,55.0,survived,,,,,,specialist
+3,Lively Rabbit,prey,red,56.0,survived,,Silent Squirrel,,,,generalist
+3,Loyal Crocodile,prey,red,53.0,survived,,,,,,generalist
+3,Silent Squirrel,prey,red,54.0,survived,,Lively Rabbit,,,,generalist
+3,Energetic Badger,prey,blue,30.0,survived,,,,,,specialist
+1,Clever Lion,prey,blue,55.0,survived,,,,,,specialist
+1,Enduring Beaver,prey,red,28.0,starved,,,,,,generalist
+1,Graceful Raccoon,prey,red,40.0,survived,,,,,,generalist
+1,Agile Hippopotamus,meso,,2.0,survived,,,9.0,,,
+1,Swift Elephant,meso,,1.0,survived,,,2.0,,,
+1,Silent Squirrel,prey,red,32.0,survived,,,,,,generalist
+1,Elusive Fox,prey,red,5.0,killed,Playful Dolphin,,,,,specialist
+1,Daring Koala,prey,red,23.0,killed,Resourceful Platypus,,,,,generalist
+1,Resilient Otter,prey,blue,9.0,killed,Loyal Crocodile,,,,,specialist
+1,Curious Penguin,prey,red,0.0,killed,Resourceful Platypus,,,,,
+1,Noble Zebra,prey,blue,25.0,killed,Resourceful Platypus,,,,,specialist
+1,Peaceful Walrus,prey,red,11.0,killed,Playful Dolphin,,,,,
+1,Tenacious Mongoose,prey,red,65.0,survived,,,,,,generalist
+1,Wise Leopard,prey,red,20.0,killed,Swift Elephant,,,,,specialist
+1,Resourceful Platypus,apex,,4.0,survived,,,9.0,,,
+2,Resourceful Platypus,prey,A VOIR,81.0,killed,Playful Dolphin,Tenacious Mongoose,,,,generalist
+3,Tenacious Mongoose,meso,blue,2.0,killed,Wandering Antelope,,6.0,,,
+3,Wild Tiger,prey,blue,35.0,killed,Wandering Antelope,,,,,specialist
+3,Clever Lion,prey,blue,10.0,killed,Tenacious Mongoose,,,,,specialist
+3,Majestic Kangaroo,prey,blue,65.0,killed,Independent Weasel,Lively Rabbit,,,,specialist
+3,Vigilant Puma,prey,blue,11.0,killed,Resilient Otter,,,,,generalist
+3,Independent Weasel,apex,,8.0,survived,,,14.0,,,
+4,Silent Squirrel,prey,red,10.0,killed,Peaceful Walrus,,,,,specialist
+4,Lively Rabbit,prey,red,0.0,killed,Peaceful Walrus,,,,,generalist
+4,Loyal Crocodile,prey,blue,30.0,killed,Peaceful Walrus,,,,,specialist
+1,Independent Weasel,prey,blue,7.0,killed,Loyal Crocodile,,,,prey type not noted,generalist
+1,Fearless Chameleon,prey,blue,20.0,killed,Agile Hippopotamus,,,,,specialist
+1,Cunning Giraffe,prey,red,68.0,survived,,,,,verify prey type with consumed resources,generalist
+1,Energetic Badger,prey,blue,20.0,killed,Loyal Crocodile,,,,verify prey type with consumed resources,specialist
+1,Lively Rabbit,prey,blue,30.0,killed,Agile Hippopotamus,,,,verify prey type with consumed resources,specialist
+1,Wandering Antelope,prey,blue,64.0,survived,,,,,verify prey type with consumed resources,generalist
+1,Wild Tiger,prey,blue,45.0,killed,Agile Hippopotamus,,,,verify prey type with consumed resources,specialist
+1,Bold Owl,prey,red,66.0,survived,,Majestic Kangaroo,,,verify prey type with consumed resources,generalist
+1,Majestic Kangaroo,prey,blue,70.0,survived,,Bold Owl,,,"verify prey type with consumed resources, reproduction = initials are ln in the app",specialist
+1,Loyal Crocodile,apex,,3.0,survived,,,16.0,,,
+1,Playful Dolphin,apex,,3.0,survived,,,11.0,,,
+1,Brave Cheetah,prey,blue,32.0,starved,,,,,verify prey type with consumed resources,generalist
+1,Gentle Bear,prey,blue,15.0,starved,,,,,verify prey type with consumed resources,specialist
+1,Fierce Porcupine,prey,blue,20.0,starved,,,,,verify prey type with consumed resources,specialist
+2,Fearless Chameleon,prey,blue,62.0,killed,Loyal Crocodile,,,,verify prey type with consumed resources,generalist
+2,Wild Tiger,prey,blue,40.0,killed,Daring Koala,,,,verify prey type with consumed resources,specialist
+2,Lively Rabbit,prey,blue,30.0,killed,Daring Koala,,,,verify prey type with consumed resources,specialist
+2,Gentle Bear,prey,blue,40.0,killed,Clever Lion,,,,verify prey type with consumed resources,specialist
+2,Fierce Porcupine,prey,red,4.0,killed,Daring Koala,,,,verify prey type with consumed resources,
+2,Majestic Kangaroo,prey,red,70.0,survived,,Energetic Badger,,,verify prey type with consumed resources,generalist
+2,Energetic Badger,prey,blue,65.0,survived,,Majestic Kangaroo,,,verify prey type with consumed resources,specialist
+2,Cunning Giraffe,prey,red,66.0,survived,,Wandering Antelope,,,verify prey type with consumed resources,generalist
+2,Bold Owl,prey,blue,60.0,survived,,Wandering Antelope,,,verify prey type with consumed resources,specialist
+2,Wandering Antelope,prey,blue,60.0,survived,,Bold Owl,,,verify prey type with consumed resources,specialist
+2,Brave Cheetah,prey,blue,60.0,survived,,Enduring Beaver,,,verify prey type with consumed resources,specialist
+2,Independent Weasel,prey,blue,63.0,survived,,Cunning Giraffe,,,verify prey type with consumed resources,generalist
+2,Clever Lion,meso,,3.0,survived,,,9.0,,,
+5,Enduring Beaver,prey,blue,10.0,killed,Noble Zebra,,,,,specialist
+5,Brave Cheetah,prey,red,12.0,killed,,,,,predator not written,generalist
+5,Elusive Fox,prey,red,33.0,killed,Vigilant Puma,,,,,generalist
+5,Agile Hippopotamus,prey,red,50.0,killed,Noble Zebra,,,,,generalist
+5,Majestic Kangaroo,prey,blue,30.0,killed,Vigilant Puma,,,,,specialist
+5,Loyal Crocodile,prey,blue,53.0,killed,Vigilant Puma,,,,,specialist
+5,Wise Leopard,prey,red,57.0,killed,Swift Elephant,,,,,generalist
+5,Graceful Raccoon,prey,blue,65.0,killed,Swift Elephant,,,,,specialist
+3,Daring Koala,prey,red,1.0,killed,Tenacious Mongoose,,,,,generalist
+3,Playful Dolphin,prey,blue,50.0,survived,,,,,,specialist
+3,Peaceful Walrus,prey,blue,25.0,killed,Wandering Antelope,,,,,specialist
+3,Swift Elephant,prey,red,50.0,survived,,Noble Zebra,,,,generalist
+3,Agile Hippopotamus,prey,red,5.0,killed,Independent Weasel,,,,,specialist
+3,Elusive Fox,meso,,0.0,killed,Resilient Otter,,2.0,,,
+3,Enduring Beaver,prey,red,53.0,survived,,,,,,generalist
+3,Graceful Raccoon,prey,red,7.0,killed,Independent Weasel,,,,,generalist
+3,Resourceful Platypus,prey,blue,15.0,killed,Wandering Antelope,,,,,specialist
+3,Curious Penguin,prey,blue,20.0,killed,Independent Weasel,,,,,specialist
+3,Noble Zebra,prey,red,54.0,survived,,Swift Elephant,,,,generalist
+3,Wandering Antelope,apex,,4.0,survived,,,16.0,,,
+3,Resilient Otter,apex,,4.0,survived,,,9.0,,,
+4,Enduring Beaver,prey,red,26.0,killed,Wandering Antelope,,,,,generalist
+4,Elusive Fox,prey,red,28.0,killed,Daring Koala,,,,,generalist
+4,Cunning Giraffe,prey,red,35.0,killed,Wandering Antelope,,,,,generalist
+4,Playful Dolphin,prey,red,11.0,killed,Wandering Antelope,,,,,specialist
+4,Swift Elephant,prey,blue,90.0,survived,,Resourceful Platypus,,,,specialist
+4,Resourceful Platypus,prey,blue,70.0,killed,Peaceful Walrus,Swift Elephant,,,,specialist
+4,Daring Koala,meso,,1.0,survived,,,11.0,,,
+4,Curious Penguin,prey,red,84.0,survived,,Noble Zebra,,,,generalist
+4,Agile Hippopotamus,prey,red,118.0,survived,,,,,,generalist
+4,Noble Zebra,prey,red,76.0,survived,,Curious Penguin,,,,generalist
+4,Peaceful Walrus,apex,,5.0,survived,,,12.0,,,
+4,Bold Owl,prey,blue,50.0,survived,,,,,,specialist
+4,Wandering Antelope,apex,,5.0,survived,,,13.0,,,
+4,Resilient Otter,prey,blue,19.0,killed,Energetic Badger,,,,,generalist
+5,Wandering Antelope,prey,blue,40.0,killed,Vigilant Puma,,,,,specialist
+5,Peaceful Walrus,prey,red,21.0,killed,Swift Elephant,,,,,
+5,Curious Penguin,prey,blue,20.0,killed,Swift Elephant,,,,,specialist
+5,Resilient Otter,prey,red,31.0,killed,Resourceful Platypus,,,,,generalist
+5,Noble Zebra,apex,,3.0,survived,,,9.0,,,
+5,Playful Dolphin,prey,red,51.0,survived,,,,,,generalist
+4,Clever Lion,prey,blue,20.0,killed,Peaceful Walrus,,,,,specialist
+6,Fierce Porcupine,prey,red,18.0,killed,Peaceful Walrus,,,,,generalist
+6,Daring Koala,apex,,7.0,survived,,,20.0,,,
+6,Clever Lion,apex,,3.0,survived,,,9.0,,,
+6,Agile Hippopotamus,prey,blue,50.0,killed,,,,,,specialist
+6,Spirited Buffalo,prey,blue,75.0,survived,,Swift Elephant,,,,specialist
+6,Brave Cheetah,prey,blue,45.0,survived,,,,,,specialist
+6,Silent Squirrel,prey,red,55.0,survived,,,,,,generalist
+6,Loyal Crocodile,prey,blue,50.0,survived,,,,,,specialist
+6,Swift Elephant,prey,blue,50.0,killed,,Spirited Buffalo,,,,specialist
+6,Energetic Badger,prey,blue,40.0,killed,,,,,,specialist
+6,Enduring Beaver,prey,red,42.0,killed,,,,,,generalist
+6,Elusive Fox,prey,blue,50.0,survived,,,,,,
+6,Intuitive Gorilla,prey,red,6.0,killed,,,,,,generalist
+6,Wise Leopard,prey,red,0.0,killed,,,,,,
+6,Adventurous Hedgehog,prey,red,,killed,,,,,,generalist
+7,Peaceful Walrus,prey,red,1.0,killed,,,,,,generalist
+7,Fierce Porcupine,prey,blue,10.0,killed,,,,,,generalist
+7,Wise Leopard,prey,red,18.0,killed,,,,,,generalist
+7,Gentle Bear,prey,blue,25.0,killed,Independent Weasel,,,,,generalist
+7,Energetic Badger,prey,red,0.0,killed,,,,,,
+7,Vigilant Puma,prey,red,16.0,killed,,,,4.0,,generalist
+7,Noble Zebra,prey,red,6.0,killed,,,,,,generalist
+6,Vigilant Puma,prey,red,60.0,survived,Noble Zebra,,,3.0,,generalist
+7,Wild Tiger,prey,red,5.0,killed,,,,,,specialist
+7,Curious Penguin,meso,,1.0,killed,Independent Weasel,,4.0,,,
+7,Enduring Beaver,prey,blue,25.0,starved,,,,4.0,,specialist
+7,Swift Elephant,prey,red,53.0,survived,,,,,I was at patch 26 instead on 27,generalist
+7,Daring Koala,prey,blue,20.0,killed,,,,7.0,,specialist
+7,Playful Dolphin,meso,,3.0,survived,,,,5.0,,
+7,Spirited Buffalo,prey,blue,30.0,survived,,,,,,specialist
+7,Clever Lion,prey,blue,35.0,survived,,,,,,specialist
+7,Wandering Antelope,prey,red,47.0,survived,,,3.0,,,generalist
+7,Graceful Raccoon,prey,,0.0,killed,,,,,,
+7,Silent Squirrel,apex,,4.0,survived,,,9.0,,,
+7,Elusive Fox,prey,blue,0.0,killed,Silent Squirrel,,,,,
+7,Loyal Crocodile,apex,,3.0,survived,,,,,,
+7,Brave Cheetah,prey,blue,5.0,killed,Loyal Crocodile,,13.0,,,specialist
+7,Cunning Giraffe,prey,red,55.0,survived,,Bold Owl,,,,
+8,Graceful Raccoon,prey,red,2.0,killed,Curious Penguin,,,,,specialist
+8,Cunning Giraffe,prey,red,2.0,killed,Curious Penguin,,,,,
+8,Clever Lion,prey,blue,20.0,killed,Noble Zebra,,,,,specialist
+8,Brave Cheetah,prey,red,22.0,killed,Enduring Beaver,,,,,generalist
+8,Noble Zebra,meso,,1.0,killed,Enduring Beaver,,1.0,,,
+8,Wise Leopard,prey,red,50.0,killed,Enduring Beaver,Playful Dolphin,,,,generalist
+8,Gentle Bear,prey,blue,15.0,killed,Enduring Beaver,,,,,specialist
+8,Intuitive Gorilla,prey,blue,20.0,survived,,Resilient Otter,,,,specialist
+8,Adventurous Hedgehog,prey,red,9.0,killed,Enduring Beaver,,,,,generalist
+8,Loyal Crocodile,prey,blue,45.0,survived,,,,,,specialist
+8,Spirited Buffalo,prey,red,45.0,survived,,,,,,generalist
+8,Playful Dolphin,prey,red,50.0,survived,,Wise Leopard,,,,generalist
+8,Silent Squirrel,prey,red,55.0,killed,Enduring Beaver,,,,,generalist
+8,Resilient Otter,prey,red,51.0,survived,,Peaceful Walrus,,,also mated with akiko kato even though it's not allowed to mate twice,generalist
+8,Enduring Beaver,apex,,8.0,survived,,,18.0,,,
+8,Peaceful Walrus,prey,red,53.0,survived,,Resilient Otter,,,,generalist
+8,Vigilant Puma,prey,red,53.0,survived,,,,,,generalist
+9,Brave Cheetah,prey,red,8.0,killed,Resilient Otter,,,,,generalist
+9,Graceful Raccoon,prey,red,17.0,killed,Wandering Antelope,,,,,generalist
+9,Wild Tiger,prey,blue,35.0,killed,Bold Owl,,,,,specialist
+9,Agile Hippopotamus,prey,blue,55.0,survived,,Intuitive Gorilla,,,,specialist
+9,Gentle Bear,prey,blue,25.0,killed,Wandering Antelope,,,,,specialist
+9,Fierce Porcupine,prey,red,51.0,,,Enduring Beaver,,,,generalist
+9,Enduring Beaver,prey,red,51.0,survived,,Fierce Porcupine,,,,generalist
+8,Swift Elephant,prey,blue,52.0,survived,,Independent Weasel,,,,generalist
+8,Independent Weasel,prey,blue,52.0,survived,,Swift Elephant,,,,
+9,Curious Penguin,prey,blue,55.0,killed,Playful Dolphin,,,,written 50 points in Pierre's notebook,
+9,Wandering Antelope,meso,,2.0,killed,,,5.0,,,
+9,Bold Owl,apex,,8.0,survived,,,,,,
+9,Swift Elephant,prey,red,54.0,survived,,Independent Weasel,,,,generalist
+6,Playful Dolphin,prey,red,30.0,killed,Daring Koala,,,,,generalist
+6,Peaceful Walrus,meso,,3.0,killed,Daring Koala,,4.0,,,
+6,Majestic Kangaroo,prey,blue,0.0,killed,Peaceful Walrus,,,,,
+6,Cunning Giraffe,prey,red,2.0,killed,Daring Koala,,,,,
+6,Curious Penguin,prey,blue,50.0,killed,Daring Koala,,,,,
+6,Independent Weasel,prey,blue,50.0,survived,,Wandering Antelope,,,,
+6,Wandering Antelope,prey,red,50.0,survived,,Independent Weasel,,4.0,,generalist
+6,Graceful Raccoon,prey,blue,30.0,survived,,,,,,specialist
+6,Wild Tiger,prey,blue,50.0,survived,,Bold Owl,,,,specialist
+6,Resilient Otter,prey,red,56.0,survived,,,,,,generalist
+6,Bold Owl,prey,blue,55.0,survived,,Wild Tiger,,,,specialist
+6,Gentle Bear,prey,blue,54.0,survived,,,,,,generalist
+6,Noble Zebra,prey,blue,50.0,survived,,Vigilant Puma,,,,specialist
+7,Agile Hippopotamus,prey,blue,20.0,killed,Silent Squirrel,,,,,generalist
+7,Resilient Otter,prey,red,0.0,killed,Curious Penguin,,,,,specialist
+7,Majestic Kangaroo,prey,blue,35.0,killed,Independent Weasel,,,,,specialist
+8,Agile Hippopotamus,prey,red,5.0,killed,Enduring Beaver,,,,,specialist
+8,Wild Tiger,prey,blue,25.0,killed,Enduring Beaver,,,,,generalist
+8,Elusive Fox,prey,blue,45.0,killed,Curious Penguin,,,,,
+8,Daring Koala,prey,blue,30.0,survived,,,,1.0,,specialist
+8,Curious Penguin,apex,apex,3.0,survived,,,9.0,,,
+8,Bold Owl,prey,blue,35.0,survived,,,,,,specialist
+8,Wandering Antelope,prey,red,52.0,survived,,Energetic Badger,,1.0,,generalist
+8,Majestic Kangaroo,prey,blue,25.0,starved,,,,,,specialist
+9,Playful Dolphin,prey,red,18.0,killed,Elusive Fox,,,,,generalist
+9,Majestic Kangaroo,prey,blue,25.0,killed,Peaceful Walrus,,,,,specialist
+9,Wise Leopard,prey,red,18.0,killed,Peaceful Walrus,,,,,generalist
+9,Loyal Crocodile,prey,blue,10.0,killed,Peaceful Walrus,,,,,specialist
+9,Clever Lion,prey,blue,20.0,killed,Bold Owl,,,,,specialist
+9,Resilient Otter,meso,,1.0,killed,Bold Owl,,5.0,,,
+9,Silent Squirrel,prey,red,0.0,killed,Peaceful Walrus,,,,,
+9,Spirited Buffalo,prey,blue,0.0,killed,Peaceful Walrus,,,,,
+9,Daring Koala,prey,blue,45.0,killed,Peaceful Walrus,,,,,specialist
+9,Elusive Fox,apex,,1.0,,,,11.0,,,
+9,Peaceful Walrus,apex,,6.0,,,,19.0,,,
+9,Independent Weasel,prey,blue,55.0,survived,,Swift Elephant,,,,
+9,Cunning Giraffe,prey,red,42.0,survived,,,,,,
+9,Noble Zebra,prey,red,42.0,killed,Bold Owl,,,,,generalist
+9,Intuitive Gorilla,prey,red,61.0,killed,Bold Owl,Agile Hippopotamus,,,,generalist
+9,Energetic Badger,prey,blue,35.0,survived,,,,,,specialist
+9,Vigilant Puma,prey,blue,17.0,killed,Bold Owl,,,,,specialist
