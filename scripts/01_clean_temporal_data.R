@@ -1,13 +1,17 @@
 library(dplyr)
 library(ggplot2)
 library(readr)
+library(stringr)
 library(tidyr)
 library(igraph)
+library(tidygraph)
+library(ggraph)
 
 
 ##### get networks #####
 
-trophic_data <- read_csv("data/raw/Cleaned_Ressources_Anonymous.csv") 
+trophic_data <- read_delim("data/raw/Consumption_event_corrected.csv", delim = ";")
+metadata <- read_delim("data/raw/Player_Data_corrected.csv", delim = ";") 
 
 # remove row names
 trophic_data <- trophic_data %>% select(-"...1")
@@ -23,7 +27,7 @@ make_networks <- function(gameid) {
   
   # select game and compute duration
   game <- trophic_data %>% 
-    filter(!is.na(ressource_id), Game_ID == gameid)  %>% 
+    filter(!is.na(ressource_id), game_id == gameid)  %>% 
     mutate(duration = time - min(time)) %>%
     arrange(duration) %>% 
     mutate(ti = grepl("[0-9]", ressource_id), # Using regex, sort the type of interactions
@@ -42,212 +46,57 @@ make_networks <- function(gameid) {
   
   # get consumer names
   players_game <- game %>% 
-    group_by(player_name) %>% 
+    group_by(player_id) %>% 
     summarize() %>% 
-    rename(id = player_name)
+    rename(id = player_id)
   
   # get resource name
   patches_game <- game %>% 
     group_by(ressource_id) %>% 
     summarize() %>% 
-    rename(id = ressource_id) 
+    rename(id = ressource_id) %>% 
+    mutate(id = tolower(id))
   
   # get individuals name
   id <- unique(rbind(players_game, patches_game)) %>% 
-    arrange(id)
+    arrange(id) %>%
+    pull()
   
   # get number of individuals
-  n <- nrow(id)
-  
+  n <- length(id)
+
   # make initial network
-  Ns <- array(0, dim = c(nrow(id), nrow(id), nrow(game)))
+  Ns <- array(0, dim = c(n, n, nrow(game)))
   
   # each matrix corresponds to a different time point
   n1 <- matrix(0, nrow = n, ncol = n)
-  Ns[,,1] = n1
+
+  # add interactions one at a time 
+  for (a in 1:nrow(game)) {
   
-  # add interactions one at a time
-  # for (a in 1:nrow(game)) {
-  # 
-  #   i <- which(id == as.character(game[a, "player_name"]))
-  #   j <- which(id == as.character(game[a, "ressource_id"]))
-  # 
-  #   n1[i,j] <- 1
-  # 
-  #   Ns[,,a] <- n1
-  # }
-  
-  Adding_interaction(game)
-  
-  return(list(Ns = Ns, duration = game$duration, type_interaction = game$type_interaction))
-}
+    i <- which(id == as.character(game[a, "player_id"]))
+    j <- which(id == tolower(as.character(game[a, "ressource_id"])))
 
-
-# Ns_foraging <- Adding_interaction(game_foraging)
-# Ns_predation <- Adding_interaction(game_predation)
-# Ns_full <- Adding_interaction(game)
-
-return(list(Ns_full = Ns_full, duration = game$duration, type_interaction = game$type_interaction,
-            Ns_foraging = Ns_foraging,
-            Ns_predation = Ns_predation))
-
-}
-
-
-
-x <- make_networks(1)  
-
-# add interactions one at a time 
-q <- Adding_interaction(game)
-
-q
-
-# for (a in 1:nrow(game)) {
-# 
-#   i <- which(id == as.character(game[a, "player_name"]))
-#   j <- which(id == as.character(game[a, "ressource_id"]))
-#   
-#   n1[i,j] <- 1
-#   
-#   Ns[,,a] <- n1
-# }
-# 
-# return(list(Ns = Ns, duration = game$duration, type_interaction = game$type_interaction))
-# }
-
-# Test %>% %>% 
-rty <- make_networks(1)
-
-
-sum %>% rty$Ns_full
-
-# ----------------
-# makes a function that build the 3 matrices 
-# All interactions - Foraging - Predation
-
-Adding_interaction <- function(df){
-  
-  for (a in 1:nrow(df)) {
-    
-    i <- which(id == as.character(df[a, "player_name"]))
-    j <- which(id == as.character(df[a, "ressource_id"]))
-    
     n1[i,j] <- 1
     
     Ns[,,a] <- n1
-  }}
 
+  }
+  
+  # find individual roles
+  metadata_game <- metadata %>% filter(game_id == gameid)
+  roles <- id
+  
+  for (i in 1:length(id)) {
+    if (id[i] %in% metadata_game$player_id) {
+      roles[i] <- metadata_game$role[metadata_game$player_id == id[i]]
+    } else {
+      roles[i] <- "ressource"
+    }
+  }
+  return(list(Ns = Ns, duration = game$duration, id = id, roles = roles))
+}
 
-matrix_foraging <- Adding_interaction(game_foraging)
-matrix_predation <- Adding_interaction(game_predation)
-matrix_full <- Adding_interaction(game)
-
-
-
-# filter games and get temporal networks
-# 
-# make_networks_test <- function(gameid) {
-#   
-#   # select game and compute duration
-#   game <- trophic_data %>% 
-#     filter(!is.na(ressource_id), Game_ID == gameid)  %>% 
-#     mutate(duration = time - min(time)) %>%
-#     arrange(duration) %>% 
-#     mutate(ti = grepl("[0-9]", ressource_id), # Using regex, sort the type of interactions
-#            type_interaction = case_when(ti == "TRUE" ~ "foraging", # If resource_id = digit --> foraging activity
-#                                         ti == "FALSE" ~ "predation")) %>% 
-#     select(-ti) %>% 
-#     mutate(score = case_when(ressource_type == "Type A" ~ 5,
-#                              ressource_type == "Type B" ~ 1))
-#   
-#   game_foraging <- game %>% 
-#     filter(type_interaction == "foraging")
-#   
-#   game_predation <- game %>% 
-#     filter(type_interaction == "predation")
-#   
-#   
-#   # get consumer names
-#   players_game <- game %>% 
-#     group_by(player_name) %>% 
-#     summarize() %>% 
-#     rename(id = player_name)
-#   
-#   # get resource name
-#   patches_game <- game %>% 
-#     group_by(ressource_id) %>% 
-#     summarize() %>% 
-#     rename(id = ressource_id) 
-#   
-#   # get individuals name
-#   id <- unique(rbind(players_game, patches_game)) %>% 
-#     arrange(id)
-#   
-#   # get number of individuals
-#   n <- nrow(id)
-#   
-#   # make initial network
-#   Ns <- array(0, dim = c(nrow(id), nrow(id), nrow(game)))
-#   
-#   # each matrix corresponds to a different time point
-#   n1 <- matrix(0, nrow = n, ncol = n)
-#   Ns[,,1] = n1
-#   
-#   # add interactions one at a time 
-#   
-#   res <- test_function(game)
-#   
-#   # for (a in 1:nrow(game)) {
-#   #   
-#   #   i <- which(id == as.character(game[a, "player_name"]))
-#   #   j <- which(id == as.character(game[a, "ressource_id"]))
-#   #   
-#   #   n1[i,j] <- 1
-#   #   
-#   #   Ns[,,a] <- n1
-#   # }
-#   
-#   return(list(Ns = res$Ns, duration = game$duration, type_interaction = game$type_interaction))
-# }
-# 
-# 
-# make_networks_test(1)
-# 
-# q <- test_function(game)
-# 
-# 
-# 
-# test_function <- function(df) {
-#   
-#   for (a in 1:nrow(df)) {
-#     
-#     i <- which(id == as.character(df[a, "player_name"]))
-#     j <- which(id == as.character(df[a, "ressource_id"]))
-#     
-#     n1[i,j] <- 1
-#     
-#     Ns[,,a] <- n1
-#   }
-#   
-#   return(list(Ns = Ns))
-#   
-# }
-# 
-# game <- trophic_data %>% 
-#   filter(!is.na(ressource_id))  %>% 
-#   mutate(duration = time - min(time)) %>%
-#   arrange(duration) %>% 
-#   mutate(ti = grepl("[0-9]", ressource_id), # Using regex, sort the type of interactions
-#          type_interaction = case_when(ti == "TRUE" ~ "foraging", # If resource_id = digit --> foraging activity
-#                                       ti == "FALSE" ~ "predation")) %>% 
-#   select(-ti) %>% 
-#   mutate(score = case_when(ressource_type == "Type A" ~ 5,
-#                            ressource_type == "Type B" ~ 1))
-# 
-# 
-# res <- test_function(game)
-# 
-# # r <- apply(X = game, FUN = test_function(.))
 
 ##### compute measures #####
 
@@ -308,33 +157,78 @@ df <- df %>%
 ##### visualize data ##### 
 
 # number of interactions through time
-ggplot(df, aes(x = duration, y = links, col = game)) +
+g1 <- ggplot(df, aes(x = duration, y = links, col = game)) +
   geom_line(lw = 1) +
   geom_point() + 
   xlab("duration (s)") +
-  ylab("number of interactions")
+  ylab("number of interactions") +
+  theme_classic()
+
+ggsave("figures/links_time.png")
 
 # modularity through time (start after 1 min)
-ggplot(df %>% filter(duration > 60), aes(x = duration, y = mod, col = game)) +
+g2 <- ggplot(df %>% filter(duration > 60), aes(x = duration, y = mod, col = game)) +
   geom_point() + 
   geom_smooth() +
   xlab("duration (s)") +
-  ylab("modularity")
+  ylab("modularity") +
+  theme_classic()
+
+ggsave("figures/mod_time.png")
 
 # modularity vs number of interactions (start after 1 min)
-ggplot(df %>% filter(duration > 60), aes(x = links, y = mod, col = game)) +
+g3 <- ggplot(df %>% filter(duration > 60), aes(x = links, y = mod, col = game)) +
   geom_point() + 
   geom_smooth() +
   xlab("number of interactions") +
-  ylab("modularity")
+  ylab("modularity") +
+  theme_classic()
 
+ggsave("figures/mod_links.png")
 
 
 ## igraph
 
-net_148 <- graph_from_adjacency_matrix(game$Ns[,,148])
-plot(net_148)
+# net_148 <- graph_from_adjacency_matrix(game$Ns[,,148])
+# plot(net_148)
+
+# visualize networks
+
+visualize_network <- function(gameid) {
+  
+  # select game
+  game <- make_networks(gameid)
+  
+  # convert to graph and simplify
+  N <- graph_from_adjacency_matrix(game$Ns[,,dim(game$Ns)[3]])
+  N <- delete.vertices(simplify(N), degree(N)==0)
+  
+  N_tbl <- as_tbl_graph(N)
+  
+  # visualize network
+  ggraph(N_tbl, layout = 'kk', maxiter = 100) + 
+    geom_node_point(aes(size = degree(N), col = game$roles)) + 
+    scale_size(name = "number of interactions", range = c(2,10)) +
+    geom_edge_link(alpha = 0.25, arrow = arrow(length=unit(0.08, "inches"))) +
+    theme_graph() +
+    scale_color_discrete(name = "roles") 
+  
+}
+
+gn1 <- visualize_network(1)
+ggsave("figures/network_game1.png", scale = 1.1)
+
+gn2 <- visualize_network(2)
+ggsave("figures/network_game2.png", scale = 1.1)
+
+gn3 <- visualize_network(3)
+ggsave("figures/network_game3.png", scale = 1.1)
+
+gn4 <- visualize_network(4)
+ggsave("figures/network_game4.png",scale = 1.1)
+
+gn5 <- visualize_network(5)
+ggsave("figures/network_game5.png", scale = 1.1)
 
 
-q <- make_networks(1)
 
