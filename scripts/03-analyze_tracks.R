@@ -153,7 +153,7 @@ table(Players_in_buffer)
 # ====================================================================
 
 # Path
-path1 <- file.path(getwd(), "data/clean")
+path1 <- file.path(getwd(), "data/clean/matrices")
 saveRDS(
   Players_in_buffer,
   file = file.path(path1, "Apex_CuriousPenguin_G8.rds")
