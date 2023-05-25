@@ -5,14 +5,23 @@
 # ========================================================================
 
 
+
+
+
 # ========================================================================
 # 1. Import librairies and data
 # ========================================================================
 
+
+# Load librairies --------------------------------------------------------
 library(data.table)
 library(lubridate)
+library(dplyr)
 
-# import matrices
+
+
+# Import matrices --------------------------------------------------------
+
 path <- file.path(getwd(), "data/raw/matrices")
 mat1 <- readRDS(
     file.path(path, "Apex_CleverLion_G6.rds")
@@ -24,7 +33,10 @@ mat3 <- readRDS(
     file.path(path, "Apex_DaringKoala_G6.rds")
 )
 
-# Import predator chase data
+
+
+# Import predator chase data ---------------------------------------------
+
 path1 <- file.path(getwd(), "data/raw")
 chases_dt <- fread(file.path(path1, "Predator_chases.csv"))
 
@@ -54,7 +66,9 @@ chases_dt[, timestamp := ymd("2023-05-23") + hms(timestamp)]
 # 2. Reshape the matrices to tables
 # ========================================================================
 
-# Matrix 1
+
+# Matrix 1 ---------------------------------------------------------------
+
 tab1 <- melt(
     mat1,
     value.name = "buffer"
@@ -67,7 +81,11 @@ tab1[, ":=" (
     game_id = 6
     )
 ]
-# Matrix 2
+
+
+
+# Matrix 2 ---------------------------------------------------------------
+
 tab2 <- melt(
     mat2,
     value.name = "buffer"
@@ -81,7 +99,10 @@ tab2[, ":=" (
     )
 ]
 
-# Matrix 3
+
+
+# Matrix 3 ---------------------------------------------------------------
+
 tab3 <- melt(
     mat3,
     value.name = "buffer"
@@ -105,40 +126,49 @@ tab3[, ":=" (
 # 3. Combine tables
 # ========================================================================
 
-# Bind
+
+# Prepare tables ---------------------------------------------------------
+
+# Bind individual tables
 tab <- rbind(tab1, tab2, tab3)
+
+# Only use complete cases for buffers
 tab <- tab[complete.cases(buffer)]
 
-test <- merge(
-    tab, chases_dt,
-    by = c("timestamp", "anonymous_id", "game_id"),
-    all = TRUE
-)
 
-unique(
-    test[, .(anonymous_id, success, game_id, lon_chase_igor, lat_chase_igor)]
-)
 
-chases_dt1 <- chases_dt
+# Merge tables -----------------------------------------------------------
+
+# This merging works, we just miss one obs so buffer needs to be >30
+chases_dt1 <- copy(chases_dt)
 
 setnames(chases_dt1, "timestamp", "timestamp_dt")
 
 test1 <- chases_dt1 %>%
-    left_join(tab, by = NULL, relationship = "many-to-many") %>%
+    right_join(
+        tab,
+        by = c("anonymous_id", "game_id"),
+        relationship = "many-to-many") %>%
     filter((timestamp_dt - timestamp) <= 20)
-
+test1
 test2 <- test1[buffer == 1]
 
-a <- unique(
+unique(
     test1[, .(anonymous_id, success, game_id, lon_chase_igor, lat_chase_igor)]
 )
 
-b <- unique(
+unique(
     test2[, .(anonymous_id, success, game_id, lon_chase_igor, lat_chase_igor)]
 )
 
-merge(a, b, all = TRUE)
-
+t <- merge(
+    chases_dt1,
+    tab,
+    all = TRUE
+)
+unique(
+    t[, .(anonymous_id, success, game_id, lon_chase_igor, lat_chase_igor)]
+)
 
 # ========================================================================
 # ========================================================================
