@@ -70,17 +70,22 @@ tracks_sf$Y_new <- st_coordinates(tracks_sf)[, "Y"]
 
 # Generalization of the former codes on 1 game for 1 predator --------
 
-# Keeping only game 3 (you can change the value here)
-tracks_sf <- tracks_sf %>%
+# There are some bugs :
+#Game 6 : Good
+#Game 7 : bug --> "Graceful Raccoon", has to be deleted
+#Game 8 : It works for the Penguins, but the Beaver is not in the database
+
+# Keeping only game 8 (you can change the value here)
+tracks_sf_game <- tracks_sf %>%
   dplyr::filter(game_id == 8)
 
 # Selecting the predator of interest
-Predator <- tracks_sf %>%
+Predator <- tracks_sf_game %>%
   dplyr::filter(player_id == "Curious Penguin")
 
 # Selecting all the other players
-Players <- tracks_sf %>%
-  dplyr::filter(player_id != "Curious Penguin")
+Players <- tracks_sf_game %>%
+  dplyr::filter(!(player_id %in% c("Curious Penguin")))
 
 # Make a list of the other players track, one element for each player
 Players_list <- split(x = Players, f = Players$player_id)
