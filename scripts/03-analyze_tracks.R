@@ -4,12 +4,20 @@
 
 # ====================================================================
 
-# Notes :
-# Clément did games
-# Fanny did games 6
-# Maxime did games 8 and 9 : Enduring Beaver and Curious Penguin
+# Predators in games :
+# - Game 9 : Peaceful Walrus, Bold Owl, Elusive Fox
+# - Game 8 : Enduring Beaver, Curious Penguin
+# - Game 7 : Silent Squirrel, Loyal Crocodile, Elusive Fox
+# - Game 6: Daring Koala, Clever Lion
 
+# Actual problems :
+# - Peaceful Walrus game 9 not working
+# - Bold Owl on game 9 not working
+# - Elusive Fox on game 9 not working
+# - All game 7 not working
 
+# Notes on games :
+# - Elusive Fox on game 7 did not play (didn't hear the bell)
 
 
 # ====================================================================
@@ -64,15 +72,15 @@ tracks_sf$Y_new <- st_coordinates(tracks_sf)[, "Y"]
 
 # Keeping only game 3 (you can change the value here)
 tracks_sf <- tracks_sf %>%
-  dplyr::filter(game_id == 8)
+  dplyr::filter(game_id == 6)
 
 # Selecting the predator of interest
 Predator <- tracks_sf %>%
-  dplyr::filter(player_id == "Curious Penguin")
+  dplyr::filter(player_id == "Clever Lion")
 
 # Selecting all the other players
 Players <- tracks_sf %>%
-  dplyr::filter(player_id != "Curious Penguin")
+  dplyr::filter(player_id != "Clever Lion")
 
 # Make a list of the other players track, one element for each player
 Players_list <- split(x = Players, f = Players$player_id)
@@ -153,10 +161,10 @@ table(Players_in_buffer)
 # ====================================================================
 
 # Path
-path1 <- file.path(getwd(), "data/clean/matrices")
+path1 <- file.path(getwd(), "data/raw/matrices")
 saveRDS(
   Players_in_buffer,
-  file = file.path(path1, "Apex_CuriousPenguin_G8.rds")
+  file = file.path(path1, "Apex_CleverLion_G6.rds")
 )
 
 # ====================================================================
