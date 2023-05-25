@@ -145,7 +145,8 @@ g1 <- ggplot(df, aes(x = duration, y = links, col = game)) +
   geom_line(lw = 1) +
   geom_point() + 
   xlab("duration (s)") +
-  ylab("number of interactions")
+  ylab("number of interactions") +
+  theme_classic()
 
 ggsave("figures/links_time.png")
 
@@ -154,7 +155,8 @@ g2 <- ggplot(df %>% filter(duration > 60), aes(x = duration, y = mod, col = game
   geom_point() + 
   geom_smooth() +
   xlab("duration (s)") +
-  ylab("modularity")
+  ylab("modularity") +
+  theme_classic()
 
 ggsave("figures/mod_time.png")
 
@@ -163,7 +165,8 @@ g3 <- ggplot(df %>% filter(duration > 60), aes(x = links, y = mod, col = game)) 
   geom_point() + 
   geom_smooth() +
   xlab("number of interactions") +
-  ylab("modularity")
+  ylab("modularity") +
+  theme_classic()
 
 ggsave("figures/mod_links.png")
 
@@ -205,4 +208,5 @@ ggsave("figures/network_game4.png",scale = 1.1)
 
 gn5 <- visualize_network(5)
 ggsave("figures/network_game5.png", scale = 1.1)
+
 
