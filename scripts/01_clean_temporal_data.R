@@ -20,8 +20,6 @@ trophic_data <- trophic_data %>% select(-"...1")
 head(trophic_data)
 
 
-# gameid = 1 
-
 # filter games and get temporal networks
 make_networks <- function(gameid, type = "binary") {
   
@@ -226,7 +224,6 @@ for (i in 1:max(trophic_data$game_id)) {
   (gn1 <- visualize_network(1))
   ggsave(filename = paste("figures/networks/network_game",i, ".png", sep = ""), scale = 1.1)
 }
-
 
 ##### Instant networks #####
 
