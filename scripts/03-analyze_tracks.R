@@ -72,15 +72,15 @@ tracks_sf$Y_new <- st_coordinates(tracks_sf)[, "Y"]
 
 # Keeping only game 3 (you can change the value here)
 tracks_sf <- tracks_sf %>%
-  dplyr::filter(game_id == 7)
+  dplyr::filter(game_id == 6)
 
 # Selecting the predator of interest
 Predator <- tracks_sf %>%
-  dplyr::filter(player_id == "Silent Squirrel")
+  dplyr::filter(player_id == "Clever Lion")
 
 # Selecting all the other players
 Players <- tracks_sf %>%
-  dplyr::filter(player_id != "Silent Squirrel")
+  dplyr::filter(player_id != "Clever Lion")
 
 # Make a list of the other players track, one element for each player
 Players_list <- split(x = Players, f = Players$player_id)
