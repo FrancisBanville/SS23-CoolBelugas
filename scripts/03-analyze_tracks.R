@@ -1,5 +1,23 @@
+# ====================================================================
 
-##### Load packages #####
+#     Calculate player distances at each timestep in buffer zone     #
+
+# ====================================================================
+
+# Notes :
+# Clément did games
+# Fanny did games 6
+# Maxime did games 8 and 9 : Enduring Beaver and Curious Penguin
+
+
+
+
+# ====================================================================
+# 1. Import data
+# ====================================================================
+
+# Load packages ------------------------------------------------------
+
 library("tidyverse")
 library("lubridate")
 library("amt")
@@ -7,12 +25,20 @@ library("sf")
 library("terra")
 library("st")
 
-##### Loading and cleaning data #####
+
+
+# Loading and cleaning data ------------------------------------------
 
 path <- file.path(getwd(), "data/raw")
 tracks_table <- read_csv(
   file.path(path, "Trimmed_Tracks_Anonymous_AllGames.csv")
 )
+
+# Arrange timezone
+tracks_table_20 <- tracks_table %>% filter(timestamp < "2023-05-21")
+tracks_table_23 <- tracks_table %>% filter(timestamp > "2023-05-21")
+hour(tracks_table_23$timestamp) <- hour(tracks_table_23$timestamp) - 4
+tracks_table <- rbind(tracks_table_20, tracks_table_23)
 
 tracks_sf <- st_as_sf(
   tracks_table, coords = c("longitude", "latitude"),
@@ -22,19 +48,31 @@ tracks_sf <- st_transform(tracks_sf, crs = 32619)
 tracks_sf$X_new <- st_coordinates(tracks_sf)[, "X"]
 tracks_sf$Y_new <- st_coordinates(tracks_sf)[, "Y"]
 
+# ====================================================================
+# ====================================================================
 
-##### "Généralization" of the former codes on 1 game for 1 predator #####
 
-# Keeping only game 3
-tracks_game_3 <- dplyr::filter(tracks_sf, game_id == 3)
+
+
+
+# ====================================================================
+# 2. Compute procedure
+# ====================================================================
+
+
+# Generalization of the former codes on 1 game for 1 predator --------
+
+# Keeping only game 3 (you can change the value here)
+tracks_sf <- tracks_sf %>%
+  dplyr::filter(game_id == 8)
 
 # Selecting the predator of interest
-Predator <- tracks_game_3 %>%
-  dplyr::filter(player_id == "Independent Weasel")
+Predator <- tracks_sf %>%
+  dplyr::filter(player_id == "Curious Penguin")
 
 # Selecting all the other players
-Players <- tracks_game_3 %>%
-  dplyr::filter(player_id != "Independent Weasel")
+Players <- tracks_sf %>%
+  dplyr::filter(player_id != "Curious Penguin")
 
 # Make a list of the other players track, one element for each player
 Players_list <- split(x = Players, f = Players$player_id)
@@ -49,13 +87,15 @@ distance_predator_player <- function(Player) {
   # Interpolating the X of the player for the predator timestamp
   Player_x_interp <- approx(
     x = Player$timestamp, y = Player$X_new,
-    xout = Predator$timestamp, method = "linear"
+    xout = Predator$timestamp, method = "linear",
+    ties = "ordered"
   )$y
 
   # Interpolating the Y of the player for the predator timestamp
   Player_y_interp <- approx(
     x = Player$timestamp, y = Player$Y_new,
-    xout = Predator$timestamp, method = "linear"
+    xout = Predator$timestamp, method = "linear",
+    ties = "ordered"
   )$y
 
   # Data frame withe the interpolated player X and Y
@@ -101,7 +141,23 @@ Players_in_buffer <- apply(
 )
 table(Players_in_buffer)
 
+# ====================================================================
+# ====================================================================
 
-##### Do it for games 8 and 9
 
-### Game 8
+
+
+
+# ====================================================================
+# Save the matrices
+# ====================================================================
+
+# Path
+path1 <- file.path(getwd(), "data/clean")
+saveRDS(
+  Players_in_buffer,
+  file = file.path(path1, "Apex_CuriousPenguin_G8.rds")
+)
+
+# ====================================================================
+# ====================================================================
