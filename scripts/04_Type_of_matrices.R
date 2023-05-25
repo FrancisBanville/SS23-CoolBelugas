@@ -19,6 +19,35 @@ trophic_data <- trophic_data %>% select(-"...1")
 # check data
 head(trophic_data)
 
+# Make subset for different interaction types
+types <- as.factor(unique(game$type_interaction))
+
+subset_dataframe <- function(df){
+  
+  game <- df %>% 
+    filter(!is.na(ressource_id), game_id == gameid)  %>% 
+    mutate(duration = time - min(time)) %>%
+    arrange(duration) %>% 
+    mutate(ti = grepl("[0-9]", ressource_id), # Using regex, sort the type of interactions
+           type_interaction = case_when(ti == "TRUE" ~ "foraging", # If resource_id = digit --> foraging activity
+                                        ti == "FALSE" ~ "predation")) %>% 
+    select(-ti) %>% 
+    mutate(score = case_when(ressource_type == "Type A" ~ 5,
+                             ressource_type == "Type B" ~ 1))
+  
+}
+
+
+try <-  subset_dataframe(trophic_data)
+
+
+nested_df <- game %>% 
+  group_by(type_interaction, game_id) %>% 
+  nest() %>% 
+  mutate(data1 = map(data, ~make_networks(1)))
+
+nested_df$data1
+
 
 adding_interaction <- function(df){
 for (a in 1:nrow(df)) {
@@ -37,11 +66,9 @@ for (a in 1:nrow(df)) {
 
 q <- adding_interaction(game)
 
-parms <- 
-
 
 game <- trophic_data %>% 
-  filter(!is.na(ressource_id), game_id == 1)  %>% 
+  filter(!is.na(ressource_id), game_id == gameid)  %>% 
   mutate(duration = time - min(time)) %>%
   arrange(duration) %>% 
   mutate(ti = grepl("[0-9]", ressource_id), # Using regex, sort the type of interactions
@@ -54,13 +81,14 @@ game <- trophic_data %>%
 
 Ns <- adding_interaction(game)
 
-# gameid = 1
+gameid = 1
 
 # filter games and get temporal networks
 make_networks <- function(gameid) {
   
   # select game and compute duration
-  game <- trophic_data %>% 
+  game <- nested_df %>% 
+    unnest() %>% 
     filter(!is.na(ressource_id), game_id == gameid)  %>% 
     mutate(duration = time - min(time)) %>%
     arrange(duration) %>% 
@@ -135,138 +163,3 @@ make_networks <- function(gameid) {
 
 
 make_networks(1)
-
-##### compute measures #####
-
-# compute number of interactions (herbivory and predatory)
-count_links <- function(game) {
-  
-  links <- rep(0, length(game$duration))
-  
-  for (a in 1:length(game$duration)) {
-    links[a] <- sum(game$Ns[,,a])
-  }
-  return(links)
-}
-
-
-# compute modularity 
-measure_modularity <- function(game) {
-  
-  mod <- rep(0, length(game$duration))
-  
-  for (a in 1:length(game$duration)) {
-    # make graph (and remove nodes without interactions)
-    N <- graph_from_adjacency_matrix(game$Ns[,,a])
-    N <- delete.vertices(simplify(N), degree(N)==0)
-    # get clusters that maximize modularity and compute modularity
-    communities <- cluster_walktrap(N)
-    mod[a] <- modularity(N, membership = communities$membership)
-  }
-  return(mod)
-}
-
-df <- data.frame()
-
-for (i in 1:5) {
-  
-  # generate networks for game i and get durations at which observations were observed
-  game <- make_networks(i)
-  duration <- game$duration
-  
-  # make graphs
-  
-  # compute number of links through time
-  links <- count_links(game)
-  
-  # compute modularity through time
-  mod <- measure_modularity(game)
-  
-  # add rows to dataframe
-  df <- rbind(df, data.frame(duration = duration, 
-                             links = links, 
-                             mod = mod,
-                             game = rep(i, length(duration))))
-}
-
-df <- df %>% 
-  mutate(duration = as.numeric(duration), game = as.factor(game))
-
-##### visualize data ##### 
-
-# number of interactions through time
-g1 <- ggplot(df, aes(x = duration, y = links, col = game)) +
-  geom_line(lw = 1) +
-  geom_point() + 
-  xlab("duration (s)") +
-  ylab("number of interactions") +
-  theme_classic()
-
-ggsave("figures/links_time.png")
-
-# modularity through time (start after 1 min)
-g2 <- ggplot(df %>% filter(duration > 60), aes(x = duration, y = mod, col = game)) +
-  geom_point() + 
-  geom_smooth() +
-  xlab("duration (s)") +
-  ylab("modularity") +
-  theme_classic()
-
-ggsave("figures/mod_time.png")
-
-# modularity vs number of interactions (start after 1 min)
-g3 <- ggplot(df %>% filter(duration > 60), aes(x = links, y = mod, col = game)) +
-  geom_point() + 
-  geom_smooth() +
-  xlab("number of interactions") +
-  ylab("modularity") +
-  theme_classic()
-
-ggsave("figures/mod_links.png")
-
-
-## igraph
-
-# net_148 <- graph_from_adjacency_matrix(game$Ns[,,148])
-# plot(net_148)
-
-# visualize networks
-
-visualize_network <- function(gameid) {
-  
-  # select game
-  game <- make_networks(gameid)
-  
-  # convert to graph and simplify
-  N <- graph_from_adjacency_matrix(game$Ns[,,dim(game$Ns)[3]])
-  N <- delete.vertices(simplify(N), degree(N)==0)
-  
-  N_tbl <- as_tbl_graph(N)
-  
-  # visualize network
-  ggraph(N_tbl, layout = 'kk', maxiter = 100) + 
-    geom_node_point(aes(size = degree(N), col = game$roles)) + 
-    scale_size(name = "number of interactions", range = c(2,10)) +
-    geom_edge_link(alpha = 0.25, arrow = arrow(length=unit(0.08, "inches"))) +
-    theme_graph() +
-    scale_color_discrete(name = "roles") 
-  
-}
-
-gn1 <- visualize_network(1)
-ggsave("figures/network_game1.png", scale = 1.1)
-
-gn2 <- visualize_network(2)
-ggsave("figures/network_game2.png", scale = 1.1)
-
-gn3 <- visualize_network(3)
-ggsave("figures/network_game3.png", scale = 1.1)
-
-gn4 <- visualize_network(4)
-ggsave("figures/network_game4.png",scale = 1.1)
-
-gn5 <- visualize_network(5)
-ggsave("figures/network_game5.png", scale = 1.1)
-
-
-
