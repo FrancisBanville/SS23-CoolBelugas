@@ -7,17 +7,11 @@ library("st")
 
 ##### Loading and cleaning data #####
 
-metadata <- read.csv("data/raw/Metadata_Anonymous.csv") 
-
-tracks_table.1 <- read.csv("data/raw/Tracking_Anonymous.csv", 
-                   colClasses=c("game_id" = "factor"))
-tracks_table <- read_csv("data/raw/Tracking_Anonymous.csv")
-tracks_table.1$timestamp <- as_datetime(tracks_table.1$timestamp)
+tracks_table <- read_csv("data/raw/Trimmed_Tracks_Anonymous_AllGames.csv")
 tracks_sf <- st_as_sf(tracks_table, coords=c("longitude", "latitude"), crs=4326, remove = F)
 tracks_sf <- st_transform(tracks_sf, crs = 32619)
 tracks_sf$X_new = st_coordinates(tracks_sf)[,"X"]
 tracks_sf$Y_new = st_coordinates(tracks_sf)[,"Y"]
-
 
 
 ##### "Généralization" of the former codes on 1 game for 1 predator #####
@@ -78,4 +72,8 @@ in_buffer <- function(dist) {
 Players_in_buffer <- apply(Players_dist, MARGIN = c(1,2), FUN = in_buffer)
 table(Players_in_buffer)
 
+
+##### Do it for games 8 and 9
+
+### Game 8 
 
