@@ -143,7 +143,7 @@ measure_modularity <- function(game) {
 
 df <- data.frame()
 
-for (i in 1:5) {
+for (i in 1:max(trophic_data$game_id)) {
   
   # generate networks for game i and get durations at which observations were observed
   game <- make_networks(i)
@@ -171,8 +171,7 @@ df <- df %>%
 
 # number of interactions through time
 (g1 <- ggplot(df, aes(x = duration, y = links, col = game)) +
-  geom_line(lw = 1) +
-  geom_point() + 
+  geom_line(size = 1.5) +
   xlab("duration (s)") +
   ylab("number of interactions") +
   theme_classic())
@@ -181,8 +180,7 @@ ggsave("figures/links_time.png")
 
 # modularity through time (start after 1 min)
 (g2 <- ggplot(df %>% filter(duration > 60), aes(x = duration, y = mod, col = game)) +
-  geom_point() + 
-  geom_smooth() +
+  geom_line(size = 1.5) +
   xlab("duration (s)") +
   ylab("modularity") +
   theme_classic())
@@ -191,8 +189,8 @@ ggsave("figures/mod_time.png")
 
 # modularity vs number of interactions (start after 1 min)
 (g3 <- ggplot(df %>% filter(duration > 60), aes(x = links, y = mod, col = game)) +
-  geom_point() + 
-  geom_smooth() +
+  geom_point(alpha = 0.3) +
+  geom_smooth(size = 1.5) +
   xlab("number of interactions") +
   ylab("modularity") +
   theme_classic())
@@ -224,21 +222,10 @@ visualize_network <- function(gameid) {
   
 }
 
-(gn1 <- visualize_network(1))
-ggsave("figures/network_game1.png", scale = 1.1)
-
-(gn2 <- visualize_network(2))
-ggsave("figures/network_game2.png", scale = 1.1)
-
-(gn3 <- visualize_network(3))
-ggsave("figures/network_game3.png", scale = 1.1)
-
-(gn4 <- visualize_network(4))
-ggsave("figures/network_game4.png",scale = 1.1)
-
-(gn5 <- visualize_network(5))
-ggsave("figures/network_game5.png", scale = 1.1)
-
+for (i in 1:max(trophic_data$game_id)) {
+  (gn1 <- visualize_network(1))
+  ggsave(filename = paste("figures/networks/network_game",i, ".png", sep = ""), scale = 1.1)
+}
 
 
 ##### Instant networks #####
@@ -277,7 +264,7 @@ make_networks_t <- function(gameid, wind = 300, int = 30) {
 # compute instant measures for all game
 df_t <- data.frame()
 
-for (i in 1:5) {
+for (i in 1:max(trophic_data$game_id)) {
   
   # generate networks for game i and get durations at which observations were observed
   game <- make_networks_t(i)
@@ -307,9 +294,7 @@ df_t <- df_t %>%
 
 
 (g4 <- ggplot(df_t, aes(x = duration, y = links, col = game)) +
-  geom_line() +
-  geom_point() + 
-  geom_errorbarh(aes(xmax = tf, xmin = ti), alpha = 0.2, height = 0) +
+  geom_line(size = 1.5) +
   xlim(0, 2000) +
   xlab("time (s)") +
   ylab("number of interactions") +
@@ -318,9 +303,7 @@ ggsave("figures/links_time_instant.png", scale = 1.1)
 
 
 (g5 <- ggplot(df_t, aes(x = duration, y = mod, col = game)) +
-  geom_line() +
-  geom_point() + 
-  geom_errorbarh(aes(xmax = tf, xmin = ti), alpha = 0.2, height = 0) +
+  geom_line(size = 1.5) +
   xlim(0, 2000) +
   ylim(0.6, 1) +
   xlab("time (s)") +
