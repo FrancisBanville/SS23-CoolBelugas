@@ -96,10 +96,6 @@ make_networks <- function(gameid) {
 }
 
 
-t <- make_networks(1)
-class(t)
-
-
 ##### compute measures #####
 
 # compute number of interactions (herbivory and predatory)
@@ -231,6 +227,5 @@ ggsave("figures/network_game4.png",scale = 1.1)
 
 gn5 <- visualize_network(5)
 ggsave("figures/network_game5.png", scale = 1.1)
-
 
 
