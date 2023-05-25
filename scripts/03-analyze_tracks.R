@@ -72,15 +72,15 @@ tracks_sf$Y_new <- st_coordinates(tracks_sf)[, "Y"]
 
 # Keeping only game 3 (you can change the value here)
 tracks_sf <- tracks_sf %>%
-  dplyr::filter(game_id == 6)
+  dplyr::filter(game_id == 8)
 
 # Selecting the predator of interest
 Predator <- tracks_sf %>%
-  dplyr::filter(player_id == "Clever Lion")
+  dplyr::filter(player_id == "Curious Penguin")
 
 # Selecting all the other players
 Players <- tracks_sf %>%
-  dplyr::filter(player_id != "Clever Lion")
+  dplyr::filter(player_id != "Curious Penguin")
 
 # Make a list of the other players track, one element for each player
 Players_list <- split(x = Players, f = Players$player_id)
@@ -136,7 +136,7 @@ Players_dist
 
 # Function that returns 1 if a value is < 20m (and 0 in it is >)
 in_buffer <- function(dist) {
-  threshold <- 20
+  threshold <- 30
   presence <- ifelse(dist < threshold, 1, 0)
   presence
 }
@@ -164,7 +164,7 @@ table(Players_in_buffer)
 path1 <- file.path(getwd(), "data/raw/matrices")
 saveRDS(
   Players_in_buffer,
-  file = file.path(path1, "Apex_CleverLion_G6.rds")
+  file = file.path(path1, "Apex_CuriousPenguin_G8.rds")
 )
 
 # ====================================================================
