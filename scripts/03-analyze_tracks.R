@@ -1,3 +1,5 @@
+
+##### Load packages #####
 library("tidyverse")
 library("lubridate")
 library("amt")
@@ -7,17 +9,24 @@ library("st")
 
 ##### Loading and cleaning data #####
 
-tracks_table <- read_csv("data/raw/Trimmed_Tracks_Anonymous_AllGames.csv")
-tracks_sf <- st_as_sf(tracks_table, coords=c("longitude", "latitude"), crs=4326, remove = F)
+path <- file.path(getwd(), "data/raw")
+tracks_table <- read_csv(
+  file.path(path, "Trimmed_Tracks_Anonymous_AllGames.csv")
+)
+
+tracks_sf <- st_as_sf(
+  tracks_table, coords = c("longitude", "latitude"),
+  crs = 4326, remove = FALSE
+)
 tracks_sf <- st_transform(tracks_sf, crs = 32619)
-tracks_sf$X_new = st_coordinates(tracks_sf)[,"X"]
-tracks_sf$Y_new = st_coordinates(tracks_sf)[,"Y"]
+tracks_sf$X_new <- st_coordinates(tracks_sf)[, "X"]
+tracks_sf$Y_new <- st_coordinates(tracks_sf)[, "Y"]
 
 
 ##### "Généralization" of the former codes on 1 game for 1 predator #####
 
 # Keeping only game 3
-tracks_game_3 <- dplyr::filter(tracks_sf, game_id==3)
+tracks_game_3 <- dplyr::filter(tracks_sf, game_id == 3)
 
 # Selecting the predator of interest
 Predator <- tracks_game_3 %>%
@@ -36,15 +45,31 @@ distance_predator_player <- function(Player) {
   #Ordering by time
   Predator <- Predator[order(Predator$timestamp), ]
   Player <- Player[order(Player$timestamp), ]
+
   # Interpolating the X of the player for the predator timestamp
-  Player_x_interp <- approx(x = Player$timestamp, y = Player$X_new, xout = Predator$timestamp, method = "linear")$y
+  Player_x_interp <- approx(
+    x = Player$timestamp, y = Player$X_new,
+    xout = Predator$timestamp, method = "linear"
+  )$y
+
   # Interpolating the Y of the player for the predator timestamp
-  Player_y_interp <- approx(x = Player$timestamp, y = Player$Y_new, xout = Predator$timestamp, method = "linear")$y
+  Player_y_interp <- approx(
+    x = Player$timestamp, y = Player$Y_new,
+    xout = Predator$timestamp, method = "linear"
+  )$y
+
   # Data frame withe the interpolated player X and Y
-  position_predator_player <- data.frame(Predator[c("timestamp", "X_new", "Y_new")], Player_x_interp, Player_y_interp) %>%
+  position_predator_player <- data.frame(
+    Predator[c("timestamp", "X_new", "Y_new")],
+    Player_x_interp, Player_y_interp
+  ) %>%
+
     # Distance along X and Y axis between the predator and the player
-    mutate(dist_X = abs(X_new - Player_x_interp),
-           dist_Y = abs(Y_new - Player_y_interp)) %>%
+    mutate(
+      dist_X = abs(X_new - Player_x_interp),
+      dist_Y = abs(Y_new - Player_y_interp)
+    ) %>%
+
     # Distance between the predator and the player (with Pythagore)
     mutate(dist = sqrt(dist_X**2 + dist_Y**2))
   position_predator_player$dist
@@ -64,16 +89,19 @@ Players_dist
 # Function that returns 1 if a value is < 20m (and 0 in it is >)
 in_buffer <- function(dist) {
   threshold <- 20
-  presence <- ifelse (dist < threshold, 1, 0)
+  presence <- ifelse(dist < threshold, 1, 0)
   presence
 }
 
 # Apply the function on the distance data frame
-Players_in_buffer <- apply(Players_dist, MARGIN = c(1,2), FUN = in_buffer)
+Players_in_buffer <- apply(
+  Players_dist,
+  MARGIN = c(1, 2),
+  FUN = in_buffer
+)
 table(Players_in_buffer)
 
 
 ##### Do it for games 8 and 9
 
-### Game 8 
-
+### Game 8
