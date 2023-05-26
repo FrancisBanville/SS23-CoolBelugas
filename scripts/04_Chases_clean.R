@@ -116,122 +116,80 @@ tab3[, ":=" (
     )
 ]
 
-# ========================================================================
-# ========================================================================
 
 
-
-
-# ========================================================================
-# 3. Combine tables
-# ========================================================================
-
-
-# Prepare tables ---------------------------------------------------------
+# Combine the tables -----------------------------------------------------
 
 # Bind individual tables
 tab <- rbind(tab1, tab2, tab3)
 
 # Only use complete cases for buffers
 tab <- tab[complete.cases(buffer)]
+
+# Only use events where individuals were in the buffer zone
 tab <- tab[buffer == 1]
 
-
-
-# Merge tables -----------------------------------------------------------
-
-
-
-
-
-# ========================================================================
-# ========================================================================
-
-
-
-
+# Remove game ID to simplify things
 tab[, game_id := NULL]
-df1 <- tab
-df2 <- chases_dt[, .(timestamp, game_id, anonymous_id, role, success)]
 
-
-
-# Assuming your first dataset is stored in 'df1' and the second dataset is in 'df2'
-
-# Create a new column in 'df1' to store the matching values
-df1$matching <- 0
-
-# Iterate over each row in 'df1'
-for (i in 1:nrow(df1)) {
-  # Get the current timestamp from 'df1'
-  timestamp1 <- df1$timestamp[i]
-
-  # Find matching rows in 'df2' with the same ID
-  matching_rows <- df2[df2$anonymous_id == df1$anonymous_id[i], ]
-
-  # Check if there are any matching rows
-  if (nrow(matching_rows) > 0) {
-    # Iterate over each matching row
-    for (j in 1:nrow(matching_rows)) {
-      # Get the timestamp from 'df2'
-      timestamp2 <- matching_rows$timestamp[j]
-
-      # Calculate the time difference in seconds
-      time_diff <- as.numeric(difftime(timestamp1, timestamp2, units = "secs"))
-
-      # Check if the time difference is within the threshold
-      if (time_diff <= 10) { #here, check if absolute diff is the problem
-        # Assign 1 to the matching column in 'df1'
-        df1$matching[i] <- 1
-        # Break the loop as a match is found
-        break
-      }
-    }
-  }
-}
-
-# Print the combined dataset
-combined_dataset <- merge(
-    df1, df2, by = c("anonymous_id", "timestamp"),
-    all.y = TRUE
-)
-print(combined_dataset)
-dt <- combined_dataset[complete.cases(player_id_buffer)]
-dt
+# ========================================================================
+# ========================================================================
 
 
 
 
-# Solution 2 (best to date)
+# ========================================================================
+# 3. Step 1: Calculate chases occuring within buffer
+# ========================================================================
 
-# Create a new column in df1 to store the event occurrence information
-df1$event_occurred <- 0
+# Just keep most important variables
+chases_dt <- chases_dt[, .(timestamp, game_id, anonymous_id, role, success)]
 
-# Iterate through the rows of df1
-for (i in 1:nrow(df1)) {
+
+# Create a new column in tab to store the event occurrence information
+tab$event_occurred <- 0
+
+
+# Iterate through the rows of tab
+for (i in 1:nrow(tab)) {
   # Get the anonymous_id and timestamp from the current row in df1
-  id <- df1$anonymous_id[i]
-  timestamp <- df1$timestamp[i]
-  
-  # Find the corresponding row(s) in df2 with the same anonymous_id
-  matching_rows <- df2[df2$anonymous_id == id, ]
-  
-  # Check if any matching row(s) have a timestamp within 20 seconds of the current timestamp in df1
+  id <- tab$anonymous_id[i]
+  timestamp <- tab$timestamp[i]
+
+  # Find the corresponding row(s) in chases_dt with the same anonymous_id
+  matching_rows <- chases_dt[chases_dt$anonymous_id == id, ]
+
+  # Check if any matching row(s) have a timestamp
+  # within 15 seconds of the current timestamp in tab
   if (any(abs(matching_rows$timestamp - timestamp) <= 15)) {
-    df1$event_occurred[i] <- 1  # Event occurred
+    tab$event_occurred[i] <- 1  # Event occurred
   }
 }
 
-# Create 10-second windows
-df1$window <- floor_date(df1$timestamp, "10 seconds")
+# ========================================================================
+# ========================================================================
 
-# Calculate the number of unique IDs within each window for each anonymous_id
-df1 <- df1 %>%
+
+
+
+
+# ========================================================================
+# 4. Step 2 : Calcualte N players inside buffer at each timestep
+# ========================================================================
+
+# Create 10-second windows to calculate
+# number of players in buffer at each timestep
+tab$window <- floor_date(tab$timestamp, "10 seconds")
+
+# Calculate the number of unique IDs
+# within each window for each anonymous_id
+tab <- tab %>%
   group_by(window, anonymous_id) %>%
   mutate(ids_around = n_distinct(player_id_buffer)) %>%
   ungroup()
 
 # Fill missing values with 0
-df1$ids_around[is.na(df1$ids_around)] <- 0
+tab$ids_around[is.na(tab$ids_around)] <- 0
 
-
+# ========================================================================
+# ========================================================================
